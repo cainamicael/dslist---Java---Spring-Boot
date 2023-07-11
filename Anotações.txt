@@ -264,7 +264,7 @@ Classe GameMinDTO:
 		
 	}
 
-Repository: Objeto responsável por fazer consultas a dados 
+Repository: Objeto responsável por fazer consultas a dados - tem a parte de inserir, deletar...
 
 Criando repository: Criaremos uma INTERFACE no Patote .repositories
 
@@ -279,3 +279,40 @@ Usaremos como primeiro parâmetro a classe, e como segundo, o tipo primitivo do 
 	public interface GameRepository extends JpaRepository<Game, Long>{
 
 	}
+
+Service: Componente responsável por implementar as lógicas de negócio
+
+Criando serciço: pacote .services a classe GameService
+
+Notations:
+
+	@Service //Ou @Component
+	@Autowired //Para injetar uma instancia do game repository
+
+Classe GameService:
+
+	package com.devsuperior.dslist.services;
+
+	import java.util.List;
+
+	import org.springframework.beans.factory.annotation.Autowired;
+	import org.springframework.stereotype.Service;
+
+	import com.devsuperior.dslist.entities.Game;
+	import com.devsuperior.dslist.repositories.GameRepository;
+
+	@Service //Ou @Component
+	public class GameService {
+		
+		@Autowired //Para injetar uma instancia do game repository
+		private GameRepository gameRepository;
+		
+		public List<Game> findAll() {
+			//Pegamos todos os games
+			List<Game> result = gameRepository.findAll(); //Recebe tudo do bd
+			return result;
+		}
+		
+	}
+
+Criando controller
