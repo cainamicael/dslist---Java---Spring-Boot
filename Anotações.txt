@@ -5,10 +5,34 @@ Dependências: Spring Web, JPA (para mecher com banco de dados), h2 (banco de da
 
 Lib maven: Colar no pom.xml (dps, botão direito na pasta root, maven, update e marca o force update)
 
-<plugin>
-	<groupId>org.apache.maven.plugins</groupId>
-	<artifactId>maven-resources-plugin</artifactId>
-	<version>3.1.0</version> <!--$NO-MVN-MAN-VER$ -->
-</plugin>
+	<plugin>
+		<groupId>org.apache.maven.plugins</groupId>
+		<artifactId>maven-resources-plugin</artifactId>
+		<version>3.1.0</version> <!--$NO-MVN-MAN-VER$ -->
+	</plugin>
 
+
+Configurando o arquivo application.properties:
+
+	spring.profiles.active=${APP_PROFILE:test}
+	spring.jpa.open-in-view=false
+
+	cors.origins=${CORS_ORIGINS:http://localhost:5173,http://localhost:3000}
+
+Perfil de testes (Configurações do banco de dados de teste (H2)):
+
+Criando o application-test.properties:
+
+	# H2 Connection
+	spring.datasource.url=jdbc:h2:mem:testdb
+	spring.datasource.username=sa
+	spring.datasource.password=
+
+	# H2 Client
+	spring.h2.console.enabled=true
+	spring.h2.console.path=/h2-console
+
+	# Show SQL
+	spring.jpa.show-sql=true
+	spring.jpa.properties.hibernate.format_sql=true
 
