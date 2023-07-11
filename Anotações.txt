@@ -36,3 +36,11 @@ Criando o application-test.properties:
 	spring.jpa.show-sql=true
 	spring.jpa.properties.hibernate.format_sql=true
 
+Fazendo ORM:
+
+Criando classe Game (entidade) no pacote entities (src/main/java):
+
+Notations usadas (para importar, damos ctrl + shift + o):
+
+	@Entity
+	@Table(name = 'tb_game')
