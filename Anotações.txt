@@ -19,6 +19,8 @@ Configurando o arquivo application.properties:
 
 	cors.origins=${CORS_ORIGINS:http://localhost:5173,http://localhost:3000}
 
+Fazendo ORM:
+
 Perfil de testes (Configurações do banco de dados de teste (H2)):
 
 Criando o application-test.properties:
@@ -35,8 +37,6 @@ Criando o application-test.properties:
 	# Show SQL
 	spring.jpa.show-sql=true
 	spring.jpa.properties.hibernate.format_sql=true
-
-Fazendo ORM:
 
 Criando classe Game (entidade) no pacote entities (src/main/java):
 
