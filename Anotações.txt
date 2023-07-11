@@ -1,0 +1,14 @@
+Criar projeto: https://start.spring.io/
+Maven e java 17
+
+Dependências: Spring Web, JPA (para mecher com banco de dados), h2 (banco de dados em memória), postgreSql (bd para implantar na nuvem)
+
+Lib maven: Colar no pom.xml (dps, botão direito na pasta root, maven, update e marca o force update)
+
+<plugin>
+	<groupId>org.apache.maven.plugins</groupId>
+	<artifactId>maven-resources-plugin</artifactId>
+	<version>3.1.0</version> <!--$NO-MVN-MAN-VER$ -->
+</plugin>
+
+
