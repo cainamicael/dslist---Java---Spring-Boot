@@ -2,8 +2,10 @@ package com.devsuperior.dslist.entities;
 
 import java.util.Objects;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
@@ -12,9 +14,12 @@ import jakarta.persistence.Table;
 public class Game {
 	
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String title;
+	
+	@Column(name = "game_year") //Para que no banco, o nome não fique year, pois dá conflito
+	
 	private Integer year;
 	private String genre;
 	private String plataform;
