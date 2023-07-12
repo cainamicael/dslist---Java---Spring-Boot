@@ -1,3 +1,12 @@
+Aula 01
+
+Objetivo:
+
+- Criar projeto / lib Maven
+- Salvar no Github
+- Arquivos Properties, entidade Game, ORM- Seed dos games
+- GameMinDTO, GameRepository, GameService, GameController
+
 Criar projeto: https://start.spring.io/
 Maven e java 17
 
@@ -373,3 +382,72 @@ Classe: retorna na url: localhost:8080/games
 		}
 			
 	}
+
+Resumo da aula 01:
+
+O que você aprendeu:
+• Conceitos
+• Sistemas web e recursos
+• Cliente/servidor, HTTP, JSON
+• Padrão Rest para API web
+• Estruturação de projeto Spring Rest
+• Entidades e ORM
+• Database seeding
+• Padrão camadas
+• Controller, service, repository
+• Padrão DTO
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Aula 02:
+
