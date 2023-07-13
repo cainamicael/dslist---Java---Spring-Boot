@@ -852,6 +852,10 @@ Rota para pegar o id via url (GameController):
 	}
 
 
+Criando o endpoind /lists:
+
+Vamos criar o DTO, a interface Repository, o service e o controller, tudo do GameList
+
 
 
 O que você aprendeu:

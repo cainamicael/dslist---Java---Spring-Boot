@@ -10,8 +10,6 @@ import com.devsuperior.dslist.dto.GameMinDTO;
 import com.devsuperior.dslist.entities.Game;
 import com.devsuperior.dslist.repositories.GameRepository;
 
-import jakarta.transaction.Transactional;
-
 @Service //Ou @Component
 public class GameService {
 	
