@@ -857,6 +857,8 @@ Criando o endpoind /lists:
 Vamos criar o DTO, a interface Repository, o service e o controller, tudo do GameList
 
 
+Parou em 1:05:00
+
 
 O que você aprendeu:
 
