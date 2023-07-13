@@ -679,7 +679,7 @@ Classe Belonging:
 		}
 	}
 
-
+Agora com tudo pronto, resta fazer o seeding com os registros no import.sql
 
 
 
