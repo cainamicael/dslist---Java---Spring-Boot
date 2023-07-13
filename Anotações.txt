@@ -542,7 +542,7 @@ Mas temos um problema: No nosso repository, precisamos ter apenas 1 tipo para o 
 Notations:
 
 	@Embeddable /*Para dizer no belonging que estes dois campos serão 1 atributo*/
-	@ManyToOne //Tipo do relacionamento
+	@ManyToOne //Tipo do relacionamento - Informar em cada uma das chaves estrangeiras
 	@JoinColumn(name = "game_id") //Chave estrangeira 01
 	@JoinColumn(name = "list_id") //Chave estrangeira 02
 
