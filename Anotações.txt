@@ -451,3 +451,243 @@ O que você aprendeu:
 
 Aula 02:
 
+O que será visto?
+
+- Implementar modelo de domínio
+- Atualizar seed da base de dados
+- GameDTO, busca game por id
+- Busca totas listas em /lists
+- Consulta SQL, projection, busca de games por lista
+
+Implementando modelo de domínio (Relacionamentos entre tabelas - classe de associação):
+
+Primeiramente, vamos criar a segunda entidada, se será a GameList:
+
+	package com.devsuperior.dslist.entities;
+
+	import java.util.Objects;
+
+	import jakarta.persistence.Entity;
+	import jakarta.persistence.GeneratedValue;
+	import jakarta.persistence.GenerationType;
+	import jakarta.persistence.Id;
+	import jakarta.persistence.Table;
+
+	@Entity
+	@Table(name = "tb_game_list")
+	public class GameList {
+
+		@Id
+		@GeneratedValue(strategy = GenerationType.IDENTITY)
+		private Long id;
+		private String name;
+		
+		public GameList(){
+			
+		}
+		
+		public GameList(Long id, String name) {
+			this.id = id;
+			this.name = name;
+		}
+
+		public Long getId() {
+			return id;
+		}
+		public String getName() {
+			return name;
+		}
+		public void setId(Long id) {
+			this.id = id;
+		}
+		public void setName(String name) {
+			this.name = name;
+		}
+
+		@Override
+		public int hashCode() {
+			return Objects.hash(id);
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj)
+				return true;
+			if (obj == null)
+				return false;
+			if (getClass() != obj.getClass())
+				return false;
+			GameList other = (GameList) obj;
+			return Objects.equals(id, other.id);
+		}	
+	}
+
+Criando tabela de associação (que terá a referência para o game e para o gamelist (os dois serão chaves primárias)): 
+
+A grosso modo, seria assim:
+
+	package com.devsuperior.dslist.entities;
+
+	public class Belonging {
+		
+		private Game game;
+		private GameList list;
+		
+		private Integer position;
+
+	}
+
+Mas temos um problema: No nosso repository, precisamos ter apenas 1 tipo para o id, pois só aceita uma chave primária, então desse jeito não conseguiriamos fazer a referência. Para contornar este problema, vamos criar outra classe auxiliar, que fará esta referência. A classe será a BelongingPK. Aqui configuraremos as chaves estrangeiras
+
+Notations:
+
+	@Embeddable /*Para dizer no belonging que estes dois campos serão 1 atributo*/
+	@ManyToOne //Tipo do relacionamento
+	@JoinColumn(name = "game_id") //Chave estrangeira 01
+	@JoinColumn(name = "list_id") //Chave estrangeira 02
+
+classe BelongingPK:
+
+	package com.devsuperior.dslist.entities;
+
+	import java.util.Objects;
+
+	import jakarta.persistence.Embeddable;
+	import jakarta.persistence.JoinColumn;
+	import jakarta.persistence.ManyToOne;
+
+	@Embeddable /*Para dizer no belonging que estes dois campos serão 1 atributo*/
+	public class BelongingPK {
+
+		@ManyToOne //Tipo do relacionamento
+		@JoinColumn(name = "game_id") //Chave estrangeira 01
+		private Game game;
+		
+		@ManyToOne
+		@JoinColumn(name = "list_id") //Chave estrangeira 02
+		private GameList list;
+		
+		public BelongingPK() {
+		}
+
+		public BelongingPK(Game game, GameList list) {
+			this.game = game;
+			this.list = list;
+		}
+
+		public Game getGame() {
+			return game;
+		}
+
+		public GameList getList() {
+			return list;
+		}
+
+		public void setGame(Game game) {
+			this.game = game;
+		}
+
+		public void setList(GameList list) {
+			this.list = list;
+		}
+
+		@Override
+		public int hashCode() {
+			return Objects.hash(game, list);
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj)
+				return true;
+			if (obj == null)
+				return false;
+			if (getClass() != obj.getClass())
+				return false;
+			BelongingPK other = (BelongingPK) obj;
+			return Objects.equals(game, other.game) && Objects.equals(list, other.list);
+		}
+	}
+
+Agora com isso, a classe Beonging corrigida ficará assim:
+
+Notations:
+
+	@Entity
+	@Table(name = "tb_belonging")
+	@EmbeddedId
+
+Classe Belonging:
+
+	package com.devsuperior.dslist.entities;
+
+	import java.util.Objects;
+
+	import jakarta.persistence.EmbeddedId;
+	import jakarta.persistence.Entity;
+	import jakarta.persistence.Table;
+
+	@Entity
+	@Table(name = "tb_belonging")
+	public class Belonging {
+		
+		@EmbeddedId //Para fazer referência a BelongingPK
+		private BelongingPK id = new BelongingPK();
+		
+		private Integer position;
+		
+		public Belonging() {
+		}
+
+		public Belonging(Game game, GameList list, Integer position) {
+			id.setGame(game);
+			id.setList(list);
+			this.position = position;
+		}
+
+		public BelongingPK getId() {
+			return id;
+		}
+
+		public Integer getPosition() {
+			return position;
+		}
+
+		public void setId(BelongingPK id) {
+			this.id = id;
+		}
+
+		public void setPosition(Integer position) {
+			this.position = position;
+		}
+
+		@Override
+		public int hashCode() {
+			return Objects.hash(id);
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj)
+				return true;
+			if (obj == null)
+				return false;
+			if (getClass() != obj.getClass())
+				return false;
+			Belonging other = (Belonging) obj;
+			return Objects.equals(id, other.id);
+		}
+	}
+
+
+
+
+
+
+
+O que você aprendeu:
+
+• Relacionamentos N-N
+• Classe de associação, embedded id
+• Consultas SQL no Spring Data JPA
+• Projections
