@@ -522,9 +522,9 @@ Primeiramente, vamos criar a segunda entidada, se será a GameList:
 		}	
 	}
 
-Criando tabela de associação (que terá a referência para o game e para o gamelist (os dois serão chaves primárias)): 
+Criando tabela de associação (que terá a referência para o id do game (chave estrangeira) e para o id do gamelist (chave estrangeira). Na tabela benonging os dois serão chaves primárias): 
 
-A grosso modo, seria assim:
+A grosso modo, SERIA assim:
 
 	package com.devsuperior.dslist.entities;
 
