@@ -689,6 +689,7 @@ Por que criar um GameDTO, se por padrão sem DTO já retorna todas os registros 
 	2. Em determinadas ocasiões, a falta de um DTO pode dar um erro de looping de informações, então fazemos o DTO para evitar problemas
 
 
+video pausado em: 43:00
 
 
 
