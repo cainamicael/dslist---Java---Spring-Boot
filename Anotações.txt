@@ -681,6 +681,15 @@ Classe Belonging:
 
 Agora com tudo pronto, resta fazer o seeding com os registros no import.sql
 
+Vamos agora criar o GameDTO  e o endpoind da busca por id:
+
+Por que criar um GameDTO, se por padrão sem DTO já retorna todas os registros do game?
+
+	1. Porque estamos seguindo uma padronização, e para facilitar o entendimento e manutenção, fazemos isso
+	2. Em determinadas ocasiões, a falta de um DTO pode dar um erro de looping de informações, então fazemos o DTO para evitar problemas
+
+
+
 
 
 
