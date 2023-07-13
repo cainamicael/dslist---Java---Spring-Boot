@@ -689,8 +689,167 @@ Por que criar um GameDTO, se por padrão sem DTO já retorna todas os registros 
 	2. Em determinadas ocasiões, a falta de um DTO pode dar um erro de looping de informações, então fazemos o DTO para evitar problemas
 
 
-video pausado em: 43:00
+Dica para copiar objetos grande (construtor - DTO):
 
+	public GameDTO(Game entity) {
+		BeanUtils.copyProperties(entity, this); /*Ao invés de passar 1 por 1, essa função faz isso (os nomes tem que ser os mesmos)*/
+	}
+
+NOTA: Para isso funcionar, o DTO deve ter gets e sets
+
+DTO GameDTO:
+
+	package com.devsuperior.dslist.dto;
+
+	import org.springframework.beans.BeanUtils;
+
+	import com.devsuperior.dslist.entities.Game;
+
+	public class GameDTO {
+
+		private Long id;
+		private String title;
+		private Integer year;
+		private String genre;
+		private String platforms;
+		private Double score;
+		private String imgUrl;
+		private String shortDescription;
+		private String longDescription;
+		
+		public GameDTO() {
+		}
+		
+		public GameDTO(Game entity) {
+			BeanUtils.copyProperties(entity, this); /*Ao invés de passar 1 por 1, essa função faz isso (os nomes tem que ser os mesmos)*/
+		}
+
+		public Long getId() {
+			return id;
+		}
+
+		public String getTitle() {
+			return title;
+		}
+
+		public Integer getYear() {
+			return year;
+		}
+
+		public String getGenre() {
+			return genre;
+		}
+
+		public String getPlatforms() {
+			return platforms;
+		}
+
+		public Double getScore() {
+			return score;
+		}
+
+		public String getImgUrl() {
+			return imgUrl;
+		}
+
+		public String getShortDescription() {
+			return shortDescription;
+		}
+
+		public String getLongDescription() {
+			return longDescription;
+		}
+
+		public void setId(Long id) {
+			this.id = id;
+		}
+
+		public void setTitle(String title) {
+			this.title = title;
+		}
+
+		public void setYear(Integer year) {
+			this.year = year;
+		}
+
+		public void setGenre(String genre) {
+			this.genre = genre;
+		}
+
+		public void setPlatforms(String platforms) {
+			this.platforms = platforms;
+		}
+
+		public void setScore(Double score) {
+			this.score = score;
+		}
+
+		public void setImgUrl(String imgUrl) {
+			this.imgUrl = imgUrl;
+		}
+
+		public void setShortDescription(String shortDescription) {
+			this.shortDescription = shortDescription;
+		}
+
+		public void setLongDescription(String longDescription) {
+			this.longDescription = longDescription;
+		}
+	}
+
+Service com o DTO de games:
+
+Notations: 
+
+	@org.springframework.transaction.annotation.Transactional(readOnly = true) //Para dizer que é somente de leitura, para otimizar
+
+Service GameService:
+
+	package com.devsuperior.dslist.services;
+
+	import java.util.List;
+
+	import org.springframework.beans.factory.annotation.Autowired;
+	import org.springframework.stereotype.Service;
+
+	import com.devsuperior.dslist.dto.GameDTO;
+	import com.devsuperior.dslist.dto.GameMinDTO;
+	import com.devsuperior.dslist.entities.Game;
+	import com.devsuperior.dslist.repositories.GameRepository;
+
+	import jakarta.transaction.Transactional;
+
+	@Service //Ou @Component
+	public class GameService {
+		
+		@Autowired //Para injetar uma instancia do game repository
+		private GameRepository gameRepository;
+		
+		@org.springframework.transaction.annotation.Transactional(readOnly = true) //Para dizer que é somente de leitura, para otimizar
+		public GameDTO findById(Long id) {
+			Game result = gameRepository.findById(id).get(); //O .get() é para pegar o dado, pois o findById puro, retorna um Opcional
+			GameDTO dto = new GameDTO(result);
+			return dto;
+		}
+		
+		@org.springframework.transaction.annotation.Transactional(readOnly = true)
+		public List<GameMinDTO> findAll() {
+			//Pegamos todos os games
+			List<Game> result = gameRepository.findAll(); //Recebe tudo do bd
+			
+			//Tratando nosso resultado, resumindo as informações para nosso dto
+			List<GameMinDTO> dto = result.stream().map(x -> new GameMinDTO(x)).toList();
+			return dto;
+		}
+	}
+
+Rota para pegar o id via url (GameController):
+
+	@GetMapping("/{id}")
+	public GameDTO findById(@PathVariable Long id) { //Para dizer que este id é o mesmo id da url
+		GameDTO result = gameService.findById(id);
+		return result;
+	}
 
 
 
