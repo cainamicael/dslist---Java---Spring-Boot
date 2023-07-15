@@ -19,7 +19,7 @@ public class GameMinDTO {
 		this.title = projection.getTitle();
 		this.year = projection.getYear();
 		this.imgUrl = projection.getImgUrl();
-		this.shortDescription = projection.getShortDesctiption();
+		this.shortDescription = projection.getshortDescription();
 	}
 	
 	public GameMinDTO(Game entity) { //Irei instanciar a partir de um obj game
