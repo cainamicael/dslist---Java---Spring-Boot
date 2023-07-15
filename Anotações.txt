@@ -887,6 +887,108 @@ Controller:
 
 Queries adicionais no repository:
 
+Quero buscar games de uma lista específica. Para isso, temos a query:
+
+	SELECT tb_game.id, tb_game.title, tb_game.game_year AS `year`, tb_game.img_url AS imgUrl,
+	tb_game.short_description AS shortDescription, tb_belonging.position
+	FROM tb_game
+	INNER JOIN tb_belonging ON tb_game.id = tb_belonging.game_id
+	WHERE tb_belonging.list_id = :listId
+	ORDER BY tb_belonging.position
+
+Como posso adicionar esta query no meu repository?
+
+colando no repository( dentro das {}):
+
+	@Query(nativeQuery = true, value = """ // nativeQuery = true serve para dizer que estamos passando uma query sql
+			SELECT tb_game.id, tb_game.title, tb_game.game_year AS `year`, tb_game.img_url AS imgUrl,
+			tb_game.short_description AS shortDescription, tb_belonging.position
+			FROM tb_game
+			INNER JOIN tb_belonging ON tb_game.id = tb_belonging.game_id
+			WHERE tb_belonging.list_id = :listId //O parâmetro do método, para ser dinâmico
+			ORDER BY tb_belonging.position
+				""")
+
+	List<GameMinProjection> searchByList(Long listId); //Nome do método que vai realizar a query acima
+
+Notations:
+
+	@Query(nativeQuery = true, value = """ AQUI VAI A QUERY SQL """) // nativeQuery = true serve para dizer que estamos passando uma query sql
+
+O que é esta projection?
+
+Quando usamos o nativeQuery (para dizer que vamos usar sql), o resultado desta consulta deve ser uma interface, que no spring chamamos de projection
+
+O que tem na projection?
+
+Métodos get, correspondentes a consulta
+
+Vamos criar a projection (GameMinProjection), no pacote .projections
+
+Repository com query personalizada:
+
+	package com.devsuperior.dslist.repositories;
+
+	import java.util.List;
+
+	import org.springframework.data.jpa.repository.JpaRepository;
+	import org.springframework.data.jpa.repository.Query;
+
+	import com.devsuperior.dslist.entities.Game;
+	import com.devsuperior.dslist.projections.GameMinProjection;
+
+	public interface GameRepository extends JpaRepository<Game, Long>{
+		
+		@Query(nativeQuery = true, value = """
+				SELECT tb_game.id, tb_game.title, tb_game.game_year AS `year`, tb_game.img_url AS imgUrl,
+				tb_game.short_description AS shortDescription, tb_belonging.position
+				FROM tb_game
+				INNER JOIN tb_belonging ON tb_game.id = tb_belonging.game_id
+				WHERE tb_belonging.list_id = :listId
+				ORDER BY tb_belonging.position
+					""")
+		List<GameMinProjection> searchByList(Long listId);
+	}
+
+Projection:
+
+	package com.devsuperior.dslist.projections;
+
+	public interface GameMinProjection {
+
+		Long getId();
+		String getTitle();
+		Integer getYear();
+		String getImgUrl();
+		String getShortDesctiption();
+		Integer getPosition();
+		
+	}
+
+Criando agora este endpoind (/lists/1/games):
+
+Como é uma consulta que retorna games, o service será o game service
+
+Para poder criar retornar um dto de games, preciso adicionar no meu GameDTO um construtor que receba uma projection:
+
+	public GameMinDTO(GameMinProjection projection) { //Irei instanciar a partir de um obj game
+		this.id = projection.getId();
+		this.title = projection.getTitle();
+		this.year = projection.getYear();
+		this.imgUrl = projection.getImgUrl();
+		this.shortDescription = projection.getShortDesctiption();
+	}
+
+Service:
+
+	@org.springframework.transaction.annotation.Transactional(readOnly = true)
+	public List<GameMinDTO> findByList(Long listId) {
+		List<GameMinProjection> result = gameRepository.searchByList(listId);
+		List<GameMinDTO> dto = result.stream().map(x -> new GameMinDTO(x)).toList();
+		return dto;
+	}
+
+Controller (GameListController):
 
 
 
