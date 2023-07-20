@@ -1207,7 +1207,7 @@ Configurações perfil dev (pg via docker):
 	#spring.jpa.properties.jakarta.persistence.schema-generation.scripts.create-target=create.sql
 	#spring.jpa.properties.hibernate.hbm2ddl.delimiter=;
 
-	spring.datasource.url=jdbc:postgresql://localhost:5433/dscatalogdslist # Porta externa - Pois nossa aplicação está fora do container e depois o nome do bd
+	spring.datasource.url=jdbc:postgresql://localhost:5433/dslist # Porta externa - Pois nossa aplicação está fora do container e depois o nome do bd - remover este comentario
 	spring.datasource.username=postgres
 	spring.datasource.password=1234567
 
@@ -1233,7 +1233,18 @@ system.properties: Algumas plataformas de hospedagem exigem este arquivo, que fi
 
 	java.runtime.version=17 # Colocar a versão do java usada. É só ver no pom.xml
 
-Vamos agora criar nossa base no pg:
+Vamos gerar o script da base de dados: Para gerar este script, descomentamos estas linhas provisoriamente do application-dev.properties:
+
+	spring.jpa.properties.jakarta.persistence.schema-generation.create-source=metadata
+	spring.jpa.properties.jakarta.persistence.schema-generation.scripts.action=create
+	spring.jpa.properties.jakarta.persistence.schema-generation.scripts.create-target=create.sql
+	spring.jpa.properties.hibernate.hbm2ddl.delimiter=;
+
+Vamos agora criar nossa base dslist no pg e inserir as queries nele
+Na pasta do projeto estará o arquivo chamado create.sql. Agora podemos comentar de novo no perfil
+Vamos fazer o seeding no nosso banco
+
+
 
 
 
