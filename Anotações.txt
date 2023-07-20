@@ -1188,13 +1188,52 @@ Registrando servidor:
 
 name: postgres-local-docker
 host: pg-docker
-port: 5432 (Porta interna. Se estivesse usando o pg admin fora do docker, seria 5433)
+port: 5432 (Porta interna - Pg Admin está dentro do container. Se estivesse usando o pg admin fora do docker, seria 5433)
 mainstance: mydatabase
 user: postgres
 password: 1234567
 
-Criando perfil dev:
+Criando perfil dev e prod:
 
+Para criar o perfil, usamos a seguinte nomenclatura: application-perfil.properties
+
+application-dev.properties
+application-prod.properties
+
+Configurações perfil dev (pg via docker):
+
+	#spring.jpa.properties.jakarta.persistence.schema-generation.create-source=metadata
+	#spring.jpa.properties.jakarta.persistence.schema-generation.scripts.action=create
+	#spring.jpa.properties.jakarta.persistence.schema-generation.scripts.create-target=create.sql
+	#spring.jpa.properties.hibernate.hbm2ddl.delimiter=;
+
+	spring.datasource.url=jdbc:postgresql://localhost:5433/dscatalogdslist # Porta externa - Pois nossa aplicação está fora do container e depois o nome do bd
+	spring.datasource.username=postgres
+	spring.datasource.password=1234567
+
+	spring.jpa.database-platform=org.hibernate.dialect.PostgreSQLDialect
+	spring.jpa.properties.hibernate.jdbc.lob.non_contextual_creation=true
+	spring.jpa.hibernate.ddl-auto=none
+
+Para dizer para nossa aplicação que vamos usar o perfil dev, mudamos no application.properties:
+
+	spring.profiles.active=${APP_PROFILE:dev}
+
+Criando perfil prod (SEMPRE usar variáveis de ambiente):
+
+	spring.datasource.url=${DB_URL}
+	spring.datasource.username=${DB_USERNAME}
+	spring.datasource.password=${DB_PASSWORD}
+
+	spring.jpa.database-platform=org.hibernate.dialect.PostgreSQLDialect
+	spring.jpa.properties.hibernate.jdbc.lob.non_contextual_creation=true
+	spring.jpa.hibernate.ddl-auto=none
+
+system.properties: Algumas plataformas de hospedagem exigem este arquivo, que fica na raiz do projeto (mesmo local onde está o pom.xml). Vamos criar:
+
+	java.runtime.version=17 # Colocar a versão do java usada. É só ver no pom.xml
+
+Vamos agora criar nossa base no pg:
 
 
 
