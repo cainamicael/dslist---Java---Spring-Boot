@@ -1122,7 +1122,7 @@ Perfis de projeto:
 	- prod
 	- Banco de dados Postgres de produção
 
-Criando perfil dev / prod:
+Configurando postgres com docker: 
 
 Iremos usar o docker. Container docker porstgres (SGBD) e container PgAdmin:
 
@@ -1173,7 +1173,27 @@ Levantando container:
 
 Abrimos a pasta raiz no powershell e usar: 
 
-docker-compose up -d
+	docker-compose up -d
+
+Comando para ver os containers que estão rodando:
+
+	docker ps
+
+Depois de instalado, para abrir no navegador nosso container, vamos usar a url: localhost:5050 (demora um pouco)
+
+login: me@example.com
+senha: 1234567
+
+Registrando servidor:
+
+name: postgres-local-docker
+host: pg-docker
+port: 5432 (Porta interna. Se estivesse usando o pg admin fora do docker, seria 5433)
+mainstance: mydatabase
+user: postgres
+password: 1234567
+
+Criando perfil dev:
 
 
 
