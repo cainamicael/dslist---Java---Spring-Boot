@@ -1245,6 +1245,13 @@ Na pasta do projeto estará o arquivo chamado create.sql. Agora podemos comentar
 Vamos fazer o seeding no nosso banco
 
 
+Resolvendo incompatibilidade:
+
+Nossa consulta personalizada tem 'year'. O postgres não aceita essa forma de escrita.
+Para resolver, vamos mudar para gameYear e tirar as aspas.
+
+Precisaremos mudar a projection e o dto também
+
 
 
 
