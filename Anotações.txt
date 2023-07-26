@@ -1358,3 +1358,78 @@ O que você aprendeu:
 
 
 Aula 04:
+
+Endpoint de reposicionamento dos games:
+
+Quero poder reposicionar. Ex: Algum game está na posição 3 e quero reposiciona-lo para a posição 1
+
+Vamos implementar este método no , pois é uma operação de movimentar o game na lista
+
+No gameListRepository vamos colocar a seguinte query:
+
+	@Modifying
+	@Query(nativeQuery = true, value = "UPDATE tb_belonging SET position = :newPosition WHERE list_id = :listId AND game_id = :gameId")
+	void updateBelongingPosition(Long listId, Long gameId, Integer newPosition);
+
+Método no GameListService:
+
+	@Transactional
+	public void move(Long listId, int sourceIndex, int destinationIndex) {
+		//Pegamos a lista
+		List<GameMinProjection> list = gameRepository.searchByList(listId);
+		
+		//Vamos remover o elemento da sua posição usando uma lista em memória, usando o remove, que retorna o obj removido
+		GameMinProjection obj = list.remove(sourceIndex); //Agora a lista está sem este game, e os elementos reposicionados
+		
+		//Agora vamos inserir o obj na posição que queremos
+		list.add(destinationIndex, obj);
+		
+		//Agora vamos salvar a alteração - só precisamos salvar o que está no range entre o indice de origem e de destino, pois o resto se mantém
+		
+		//Vamos pegar o valor mínimo e máximo entre o indice de origem e destino
+		int min = sourceIndex < destinationIndex ? sourceIndex : destinationIndex;
+		int max = sourceIndex < destinationIndex ? destinationIndex : destinationIndex;
+		
+		for (int i = min; i <= max; i++) {
+			gameListRepository.updateBelongingPosition(listId, list.get(i).getId(), i);
+		}
+	}
+
+Projetando o endpoint não indepotente (usando verbo post): Usamos substantivos no endpoint, e não verbo
+
+Teremos o seguinte endpoint: http://localhost:8080/lists/2/replacement e passaremos as informações no corpo
+
+Vamos agora criar o dto para capturarmos estes valores:
+
+	package com.devsuperior.dslist.dto;
+
+	public class ReplacementDTO {
+
+		private Integer sourceIndex;
+		private Integer destinationInteger;
+
+		public Integer getSourceIndex() {
+			return sourceIndex;
+		}
+
+		public Integer getDestinationInteger() {
+			return destinationInteger;
+		}
+
+		public void setSourceIndex(Integer sourceIndex) {
+			this.sourceIndex = sourceIndex;
+		}
+
+		public void setDestinationInteger(Integer destinationInteger) {
+			this.destinationInteger = destinationInteger;
+		}	
+	}
+
+Vamos criar o controller no GameListController:
+
+	@PostMapping(value = "/{listId}/replacement")
+	public void move(@PathVariable Long listId,@RequestBody ReplacementDTO body){
+		gameListService.move(listId, body.getSourceIndex(), body.getDestinationIndex());
+	}
+
+
