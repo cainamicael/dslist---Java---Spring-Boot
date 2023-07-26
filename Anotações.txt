@@ -1252,24 +1252,40 @@ Para resolver, vamos mudar para gameYear e tirar as aspas.
 
 Precisaremos mudar a projection e o dto também
 
+Deploy:
 
+Temos que prover um servidor de banco de dados pg na plataforma do deploy
+Vamos conectar o banco de dados hospegado na nossa aplicação e iremos configurar as variáveis de ambiente que estamos usando no perfil prod
 
+APP_PROFILE
+DB_URL (Formato: jdbc:postgresql://host:porta/nomedabase)
+DB_USERNAME
+DB_PASSWORD
+CORS_ORIGINS
 
+Configurando cors (Autorizo os hosts que vão consumir minha api):
 
+Vamos criar uma classe chamada WebConfig, no pacote config:
 
+	@Configuration
+	public class WebConfig {
 
+		@Value("${cors.origins}")
+		private String corsOrigins;
+		
+		@Bean
+		public WebMvcConfigurer corsConfigurer() {
+			return new WebMvcConfigurer() {
+				@Override
+				public void addCorsMappings(CorsRegistry registry) {
+					registry.addMapping("/**").allowedMethods("*").allowedOrigins(corsOrigins);
+				}
+			};
+		}
+		
+	}
 
-
-
-
-
-
-
-
-
-
-
-
+Esta classe configura os cors do ambiente
 
 O que você aprendeu:
 
