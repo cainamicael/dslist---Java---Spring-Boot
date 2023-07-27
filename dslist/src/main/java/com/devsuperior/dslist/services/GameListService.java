@@ -43,7 +43,7 @@ public class GameListService {
 		
 		//Vamos pegar o valor mínimo e máximo entre o indice de origem e destino
 		int min = sourceIndex < destinationIndex ? sourceIndex : destinationIndex;
-		int max = sourceIndex < destinationIndex ? destinationIndex : destinationIndex;
+		int max = sourceIndex < destinationIndex ? destinationIndex : sourceIndex;
 		
 		for (int i = min; i <= max; i++) {
 			gameListRepository.updateBelongingPosition(listId, list.get(i).getId(), i);
