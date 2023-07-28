@@ -1,3 +1,12 @@
+Principais passos a serem feitos:
+
+	Configurações
+	Entidades
+	Seeding
+	DTOs
+	Services
+	Controllers
+
 Aula 01
 
 Objetivo:
