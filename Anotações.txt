@@ -1237,6 +1237,16 @@ Para dizer para nossa aplicação que vamos usar o perfil dev, mudamos no applic
 
 	spring.profiles.active=${APP_PROFILE:dev}
 
+Outra forma de conexão com Postgres via docker e conectando no DBeaver:
+
+	docker run --name postgres_container_mydb_root_1234567 -e POSTGRES_USER=root -e POSTGRES_PASSWORD=1234567 -e POSTGRES_DB=mydb -p 5432:5432 postgres
+
+	spring.datasource.url=jdbc:postgresql://localhost:5432/mydb
+	spring.datasource.username=root
+	spring.datasource.password=1234567
+	spring.jpa.hibernate.ddl-auto=update #Para já criar a tabela
+	spring.jpa.show-sql=true
+
 Criando perfil prod (SEMPRE usar variáveis de ambiente):
 
 	spring.datasource.url=${DB_URL}
@@ -1440,5 +1450,3 @@ Vamos criar o controller no GameListController:
 	public void move(@PathVariable Long listId,@RequestBody ReplacementDTO body){
 		gameListService.move(listId, body.getSourceIndex(), body.getDestinationIndex());
 	}
-
-
